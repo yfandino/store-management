@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Card, CardContent, Typography } from '@material-ui/core';
+import { Grid, Card, CardHeader, CardContent, Typography } from '@material-ui/core';
 
 const cards = [
   { id: "taxable", title: "Total Imponible", symbol: "€"},
@@ -12,12 +12,15 @@ const cards = [
 
 const InvoiceTotals = (props) => {
   return (
-    <Grid item container wrap="nowrap" spacing={2}>
+    <>
       {cards.map( card => (
-        <Grid item xs={3} key={card.id}>
+        <Grid item xs={3} key={card.id} className="grid__invoice-total">
           <Card>
+            <CardHeader
+              title={card.title}
+              titleTypographyProps={{ color: "primary", className: "card__card-header--invoice-title" }}
+            />
             <CardContent>
-              <Typography color="primary">{card.title}</Typography>
               <Typography variant="h4" style={{ padding: "8px 0" }} >
                 {props[card.id] ? `${props[card.id]}${card.symbol}` : "-"}
               </Typography>
@@ -25,7 +28,7 @@ const InvoiceTotals = (props) => {
           </Card>
         </Grid>
       ))}
-    </Grid>
+    </>
   );
 }
 

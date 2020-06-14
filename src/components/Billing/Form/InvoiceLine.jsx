@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Paper, Grid, IconButton, TextField, InputAdornment } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Grid, IconButton, InputAdornment, TextField } from '@material-ui/core';
+import { Delete as DeleteIcon } from '@material-ui/icons';
 
 const inputs = [
   { id: "description", label: "Descripción", type: "text"},
@@ -12,12 +12,12 @@ const inputs = [
 ]
 
 const InvoiceLine = (props) => {
-  let { data, lineIndex, onChange, onDelete } = props;
-  let { units, unitPrice, discount, tax } = data;
+  let { lineData, lineIndex, onChange, onDelete } = props;
+  let { units, unitPrice, discount, tax } = lineData;
 
   const handleInputChange = (e) => {
     const { name, value } = e.currentTarget;
-    data = { ...data, [name]: value };
+    let data = { ...lineData, [name]: value };
     onChange(lineIndex, data);
   }
 
@@ -32,39 +32,37 @@ const InvoiceLine = (props) => {
     let lineTotalWithDiscount = totalUnitsPrice - (totalUnitsPrice * ((discount/100) || 0));
     let lineTotalPriceWithTax = lineTotalWithDiscount + (lineTotalWithDiscount * (tax/100));
 
-    data.lineTotalPriceWithTax = lineTotalPriceWithTax;
-    onChange(lineIndex, data);
+    lineData.lineTotalPriceWithTax = lineTotalPriceWithTax;
+    onChange(lineIndex, lineData);
   }, [units, unitPrice, discount, tax]);
-  
+
   return (
-    <Grid item container component={Paper} wrap="nowrap" alignItems="center" style={{ marginBottom: 16 }}>
-      <Grid item container spacing={2}>
-        {inputs.map( (input, index) => (
-          <Grid item xs={index === 0 ? 6 : true} key={input.id}>
-            <TextField
-              variant="outlined"
-              size="small"
-              margin="normal"
-              fullWidth
-              required
-              type={input.type}
-              id={input.id}
-              label={input.label}
-              name={input.id}
-              onChange={handleInputChange}
-              value={data[input.id]}
-              InputProps={{
-                readOnly: input.readOnly,
-                endAdornment: input.endAdornment ? <InputAdornment position="end">{input.endAdornment}</InputAdornment> : null
-              }}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </Grid>
-        ))}
-      </Grid>
-      <Grid item style={{ paddingLeft: 8 }}>
+    <Grid container alignItems="center" spacing={2}>
+      {inputs.map( (input, index) => (
+        <Grid item xs={index === 0 ? 6 : true} key={input.id}>
+          <TextField
+            variant="outlined"
+            size="small"
+            margin="normal"
+            fullWidth
+            required
+            type={input.type}
+            id={input.id}
+            label={input.label}
+            name={input.id}
+            onChange={handleInputChange}
+            value={lineData[input.id]}
+            InputProps={{
+              readOnly: input.readOnly,
+              endAdornment: input.endAdornment ? <InputAdornment position="end">{input.endAdornment}</InputAdornment> : null
+            }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </Grid>
+      ))}
+      <Grid item>
         <IconButton onClick={handleDelete}><DeleteIcon /></IconButton>
       </Grid>
     </Grid>

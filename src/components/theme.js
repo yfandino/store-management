@@ -46,6 +46,23 @@ const theme = createMuiTheme({
       stickyHeader: {
         backgroundColor: '#EFEFEF'
       }
+    },
+    MuiCard: {
+      root: {
+        '& .card__card-header--invoice-title': {
+          textTransform: "uppercase",
+          fontSize: '1rem',
+          fontWeight: 600
+        },
+        '& .card-header__invoice-body': {
+          paddingBottom: 0
+        }
+      }
+    },
+    MuiCardContent: {
+      root: {
+        paddingBottom: 8
+      }
     }
   }
 });
