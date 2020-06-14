@@ -1,0 +1,62 @@
+{
+  "title": "Nueva factura",
+  "type": "object",
+  "properties": {
+    "client": {
+      "type": "object",
+      "title": "Datos del cliente",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Nombre y Apellidos"
+        },
+        "id": {
+          "type": "string",
+          "title": "Documento de identificación"
+        },
+        "address": {
+          "type": "string",
+          "title": "Dirección"
+        },
+        "phone": {
+          "type": "string",
+          "title": "Número de teléfono"
+        }
+      }
+    },
+    "lines": {
+      "type": "array",
+      "title": "Productos",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "title": "Descripción"
+          },
+          "units": {
+            "type": "number",
+            "title": "Unidades"
+          },
+          "unitPrice": {
+            "type": "number",
+            "title": "Precio unitario"
+          },
+          "discount": {
+            "type": "number",
+            "title": "Descuento"
+          },
+          "tax": {
+            "type": "number",
+            "title": "IVA"
+          },
+          "lineTotalPriceWithTax": {
+            "type": "number",
+            "title": "Precio"
+          }
+        }
+      }
+    }
+  }
+}
