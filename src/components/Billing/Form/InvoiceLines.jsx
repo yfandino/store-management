@@ -6,7 +6,6 @@ import InvoiceLine from './InvoiceLine';
 
 const InvoiceLines = (props) => {
   let { lines, onAdd, onChange, onDelete } = props;
-  
   return (
     <Card className="grid__invoice-row">
       <CardHeader

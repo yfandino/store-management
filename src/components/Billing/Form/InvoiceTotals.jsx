@@ -5,7 +5,7 @@ const cards = [
   { id: "taxable", title: "Total Imponible", symbol: "€"},
   { id: "discount", title: "Descuento", symbol: "%"},
   { id: "totalTax", title: "Total IVA", symbol: "€"},
-  { id: "totalWidthDiscount", title: "Total con descuento", symbol: "€"},
+  { id: "totalWidthDiscount", title: "Total descuento", symbol: "€"},
   { id: "shipment", title: "Envío", symbol: "€"},
   { id: "total", title: "Total a pagar", symbol: "€"}
 ]
@@ -18,11 +18,15 @@ const InvoiceTotals = (props) => {
           <Card>
             <CardHeader
               title={card.title}
-              titleTypographyProps={{ color: "primary", className: "card__card-header--invoice-title" }}
+              titleTypographyProps={{ 
+                color: "primary", 
+                className: "card__card-header--invoice-title",
+                style: { whiteSpace: "nowrap" }
+              }}
             />
             <CardContent>
               <Typography variant="h4" style={{ padding: "8px 0" }} >
-                {props[card.id] ? `${props[card.id]}${card.symbol}` : "-"}
+                {props[card.id] ? `${Number(props[card.id]).toLocaleString("es")}${card.symbol}` : "-"}
               </Typography>
             </CardContent>
           </Card>
