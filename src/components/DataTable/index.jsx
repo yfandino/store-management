@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core';
 
+import { API_BILLING } from '../../firebase/api'
+
 const columns = [
-  { id: 'id', label: 'Nº de Factura', minWidth: 100 },
+  { id: 'invoiceNumber', label: 'Nº de Factura', minWidth: 100 },
   { id: 'date', label: 'Fecha', minWidth: 100 },
   { id: 'client', label: 'Client', minWidth: 170 },
   { id: 'qty', label: 'Cantidad de productos', minWidth: 80, align: 'right', format: (value) => value.toLocaleString('es-ES') },
@@ -12,18 +14,27 @@ const columns = [
 const DataTable = (props) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const { onPagination } = props;
 
   const { rows } = props;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+    let invoices;
+    if (newPage > page) {
+      console.log("pa lante", newPage, page)
+      invoices = API_BILLING.goNextPage(rowsPerPage);
+    } else {
+      console.log("pa atras", newPage, page)
+    }
+    onPagination(invoices)
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
+  
   return (
     <Paper>
       <TableContainer>
@@ -42,7 +53,7 @@ const DataTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+            {rows.map((row, index) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                   {columns.map((column) => {

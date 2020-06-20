@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Button } from '@material-ui/core';
 
+import { API_BILLING } from '../../../firebase/api';
 import InvoiceTotals from './InvoiceTotals';
 import InvoiceClient from './InvoiceClient';
 import InvoiceLines from './InvoiceLines';
@@ -11,7 +12,7 @@ const defaultLineValues = {
 };
 
 const Form = () => {
-  const [client, setClients] = useState({});
+  const [client, setClient] = useState({});
   const [lines, setLines] = useState([defaultLineValues]);
   const [totals, setTotals] = useState({});
 
@@ -25,7 +26,6 @@ const Form = () => {
     }
     let totalProducts = 0;
     lines.reduce( (acc, current) => {
-      debugger
       totalProducts += current.unitPrice ? (current.unitPrice * current.units) : 0;
       acc.taxable += current.tax === 21
         ? current.unitPrice && current.units ? (current.unitPrice * current.units) : 0
@@ -79,10 +79,13 @@ const Form = () => {
     e.preventDefault();
     const invoice = {
       client,
-      lines
+      lines,
+      totals
     }
 
-    console.log(invoice);
+    const response = API_BILLING.addInvoice(invoice)
+      .then( res => console.log("then res", res))
+      .catch( err => console.log("Error Add Invoice", err));
   }
 
   return (
@@ -101,7 +104,7 @@ const Form = () => {
       </Grid>
       
       <Grid item>
-        <InvoiceClient onChange={setClients}/>
+        <InvoiceClient onChange={setClient}/>
       </Grid>
       
       <Grid item container direction="column">

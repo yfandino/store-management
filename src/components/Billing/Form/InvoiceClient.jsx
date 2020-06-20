@@ -8,7 +8,13 @@ const inputs = [
   { id: "phone", label: "Teléfono", type: "tel"},
 ]
 
-const InvoiceClient = () => {
+const InvoiceClient = (props) => {
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.currentTarget;
+    props.onChange( prevState => ({ ...prevState, [name]: value }));
+  }
+
   return (
     <Card className="grid__invoice-row">
       <CardHeader
@@ -34,6 +40,7 @@ const InvoiceClient = () => {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                onChange={handleInputChange}
               />
             </Grid>
           ))}
