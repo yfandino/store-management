@@ -34,17 +34,22 @@ const App = () => {
     })
   }
 
-  if (state.loading) return <CircularProgress />
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
-        <Switch>
-          <Route exact path="/login" render={ () => <SignIn setUser={setUser} />} />
-          <AuthRoutes user={state.user} />
-        </Switch>
-      </Router>
+      {state.loading ? (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <Router>
+          <Switch>
+            <Route exact path="/login" render={ () => <SignIn setUser={setUser} />} />
+            <AuthRoutes user={state.user} />
+          </Switch>
+        </Router>
+      )}
+      
     </ThemeProvider>
   )
 }
