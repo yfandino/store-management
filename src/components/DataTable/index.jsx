@@ -1,36 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core';
 
-import { API_BILLING } from '../../firebase/api'
-
-const columns = [
-  { id: 'invoiceNumber', label: 'Nº de Factura', minWidth: 100 },
-  { id: 'date', label: 'Fecha', minWidth: 100 },
-  { id: 'client', label: 'Client', minWidth: 170 },
-  { id: 'qty', label: 'Cantidad de productos', minWidth: 80, align: 'right', format: (value) => value.toLocaleString('es-ES') },
-  { id: 'total', label: 'Total (€)', minWidth: 80, align: 'right', format: (value) => value.toLocaleString('es-ES') }
-];
-
 const DataTable = (props) => {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { onPagination } = props;
 
-  const { rows } = props;
+  const { columns, rows, page, rowsPerPage, setPage, setRowsPerPage, setIsLoading } = props;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    let invoices;
-    if (newPage > page) {
-      console.log("pa lante", newPage, page)
-      invoices = API_BILLING.goNextPage(rowsPerPage);
-    } else {
-      console.log("pa atras", newPage, page)
-    }
-    onPagination(invoices)
   };
 
   const handleChangeRowsPerPage = (event) => {
+    setIsLoading(true);
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
