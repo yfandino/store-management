@@ -20,3 +20,4 @@ export const LOCAL = firebase.auth.Auth.Persistence.LOCAL;
 export const SESSION = firebase.auth.Auth.Persistence.SESSION;
 
 export const Firestore = firebase.firestore();
+export const FieldValue = firebase.firestore.FieldValue;
