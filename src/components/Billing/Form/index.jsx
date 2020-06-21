@@ -83,7 +83,7 @@ const Form = () => {
       totals
     }
 
-    const response = API_BILLING.addInvoice(invoice)
+    API_BILLING.addInvoice(invoice)
       .then( res => console.log("then res", res))
       .catch( err => console.log("Error Add Invoice", err));
   }

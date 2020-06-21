@@ -3,6 +3,7 @@ import { CircularProgress, Typography } from '@material-ui/core';
 
 import { API_BILLING } from '../../../firebase/api';
 import DataTable from '../../DataTable';
+import Snackbar from '../../Snackbar';
 
 const columns = [
   { id: 'invoiceNumber', label: 'Nº de Factura', minWidth: 100 },
@@ -12,16 +13,25 @@ const columns = [
   { id: 'total', label: 'Total (€)', minWidth: 80, align: 'right', format: (value) => value.toLocaleString('es-ES') }
 ];
 
-const InvoiceTable = () => {
+const InvoicesTable = () => {
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [error, setError] = useState(null);
+  const [error, setError] = useState({ message: "Esto es un mensaje de error "});
 
   useEffect( () => {
-    async function getInvoices() {
-      const invoices = await API_BILLING.getInvoices(rowsPerPage);
-      setRows(parseData(invoices));
+    function getInvoices() {
+      API_BILLING.getInvoices(rowsPerPage)
+        .then( querySnapshot => {
+          const invoices = querySnapshot.docs.map( doc => ({ id: doc.id, ...doc.data() }));
+          setRows(parseData(invoices));
+        })
+        .catch( err => {
+          console.log("Error Invoice List", err);
+          setError(err);
+        });
       setIsLoading(false);
     }
 
@@ -37,6 +47,8 @@ const InvoiceTable = () => {
       total: e.totals.total
     }));
   }
+
+  if (error) return <Snackbar open={true} message={error.message} type="error" />;
 
   if (isLoading) return <div style={{ margin: 16, textAlign: "center" }}><CircularProgress /></div>;
 
@@ -56,4 +68,4 @@ const InvoiceTable = () => {
   );
 };
 
-export default InvoiceTable;
+export default InvoicesTable;

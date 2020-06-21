@@ -2,7 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Container, Button, Grid, Divider } from '@material-ui/core';
 
-import DataTable from './DataTable';
+import InvoicesTable from './DataTable';
 
 const Billing = () => {
   return (
@@ -13,7 +13,7 @@ const Billing = () => {
         </Button>
       </Grid>
       <Divider />
-      <DataTable />
+      <InvoicesTable />
     </Container>
   );
 }

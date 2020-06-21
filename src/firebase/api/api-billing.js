@@ -4,12 +4,15 @@ import { addClient } from './api-clients';
 const REACT_APP_TABLE_INVOICE = process.env.REACT_APP_TABLE_INVOICE;
 const tableInvoiceRef = Firestore.collection(REACT_APP_TABLE_INVOICE);
 
+/**
+ * Get invoices with pagination. Default limit = 10. Return Promise<QuerySnapshot>
+ * @param {int} limit 
+ */
 export function getInvoices(limit = 10) {
   return tableInvoiceRef
     .limit(limit)
     .orderBy("date", "desc")
-    .get()
-    .then( querySnapshot => querySnapshot.docs.map( doc => ({ id: doc.id, ...doc.data() }) ))
+    .get();
 }
 
 export function goNextPage(limit = 10, docSnapshot) {
