@@ -5,6 +5,7 @@ import { API_BILLING } from '../../../firebase/api';
 import InvoiceTotals from './InvoiceTotals';
 import InvoiceClient from './InvoiceClient';
 import InvoiceLines from './InvoiceLines';
+import Snackbar from '../../Snackbar';
 
 const defaultLineValues = {
   units: 1,
@@ -15,6 +16,7 @@ const Form = () => {
   const [client, setClient] = useState({});
   const [lines, setLines] = useState([defaultLineValues]);
   const [totals, setTotals] = useState({});
+  const [error, setError] = useState(null);
 
   useEffect(function updateInvoice() {
     let updatedTotals = {
@@ -77,6 +79,7 @@ const Form = () => {
 
   const onCreate = (e) => {
     e.preventDefault();
+
     const invoice = {
       client,
       lines,
@@ -85,38 +88,44 @@ const Form = () => {
 
     API_BILLING.addInvoice(invoice)
       .then( res => console.log("then res", res))
-      .catch( err => console.log("Error Add Invoice", err));
+      .catch( err => {
+        console.log("Error Add Invoice", err);
+        setError({ message: "Ops, ha ocurrido un error al intentar crear la factura" });
+      });
   }
 
   return (
-    <Grid container direction="column" component="form" spacing={2} style={{ marginTop: 16 }}>
-      <Grid item container spacing={2} justify="flex-end">
-        <Grid item>
-          <Button type="submit" variant="outlined" color="primary" onClick={onSave}>Guardar</Button>
+    <>
+      {error && (<Snackbar open={true} message={error.message} type="error" />)}
+      <Grid container direction="column" component="form" spacing={2} style={{ marginTop: 16 }}>
+        <Grid item container spacing={2} justify="flex-end">
+          <Grid item>
+            <Button type="submit" variant="outlined" color="primary" onClick={onSave}>Guardar</Button>
+          </Grid>
+          <Grid item>
+            <Button variant="contained" color="primary" onClick={onCreate}>Crear</Button>
+          </Grid>
         </Grid>
-        <Grid item>
-          <Button variant="contained" color="primary" onClick={onCreate}>Crear</Button>
+        
+        <Grid item container wrap="nowrap" spacing={3}>
+          <InvoiceTotals onChange={setTotals} {...totals} />
         </Grid>
+        
+        <Grid item>
+          <InvoiceClient onChange={setClient}/>
+        </Grid>
+        
+        <Grid item container direction="column">
+          <InvoiceLines
+            lines={lines}
+            onAdd={onAddLine}
+            onChange={onLineChange}
+            onDelete={onDeleteLine}
+          />
+        </Grid>
+        
       </Grid>
-      
-      <Grid item container wrap="nowrap" spacing={3}>
-        <InvoiceTotals onChange={setTotals} {...totals} />
-      </Grid>
-      
-      <Grid item>
-        <InvoiceClient onChange={setClient}/>
-      </Grid>
-      
-      <Grid item container direction="column">
-        <InvoiceLines
-          lines={lines}
-          onAdd={onAddLine}
-          onChange={onLineChange}
-          onDelete={onDeleteLine}
-        />
-      </Grid>
-      
-    </Grid>
+    </>
   );
 }
 
