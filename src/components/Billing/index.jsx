@@ -3,6 +3,7 @@ import { useRouteMatch, Switch, Route } from 'react-router-dom';
 
 import Billing from './Billing';
 import CreateInvoice from './CreateInvoice';
+import InvoiceViewer from './InvoiceViewer';
 
 const BillingRoutes = () => {
 
@@ -16,7 +17,9 @@ const BillingRoutes = () => {
       <Route path={`${path}/new`}>
         <CreateInvoice />
       </Route>
-      <Route path={`${path}/:id`} render={() => "View bill"}/>
+      <Route path={`${path}/:id`}>
+        <InvoiceViewer />
+      </Route>
     </Switch>
   )
 };

@@ -3,7 +3,7 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePag
 
 const DataTable = (props) => {
 
-  const { columns, rows, page, rowsPerPage, setPage, setRowsPerPage, setIsLoading } = props;
+  const { columns, rows, page, rowsPerPage, setPage, setRowsPerPage, setIsLoading, pagination } = props;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -50,7 +50,7 @@ const DataTable = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
+      {pagination && (<TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
         count={rows.length}
@@ -58,7 +58,7 @@ const DataTable = (props) => {
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
+      />)}
     </Paper>
   );
 };

@@ -51,6 +51,7 @@ const InvoiceTable = () => {
       setPage={setPage}
       setRowsPerPage={setRowsPerPage}
       setIsLoading={setIsLoading}
+      pagination
     />
   );
 };

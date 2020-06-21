@@ -14,6 +14,11 @@ const theme = createMuiTheme({
   },
   overrides: {
     MuiDrawer: {
+      root: {
+        "@media print": {
+          display: "none"
+        }
+      },
       paperAnchorLeft: {
         backgroundColor: '#0C4160',
         borderRadius: '0 8px 8px 0'
@@ -24,6 +29,16 @@ const theme = createMuiTheme({
         '& .breadcrumb-title': {
           flexGrow: 1,
           textTransform: 'uppercase'
+        },
+        "@media print": {
+          display: "none"
+        }
+      }
+    },
+    MuiPaper: {
+      elevation1: {
+        "@media print": {
+          boxShadow: "none"
         }
       }
     },

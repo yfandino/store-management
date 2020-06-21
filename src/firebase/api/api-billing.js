@@ -31,11 +31,14 @@ export function getLastInvoice() {
     .then( querySnapshot => querySnapshot.docs.map( doc => ({ id: doc.id, ...doc.data() })));
 }
 
-export function getInvoiceByQuery({ table, query }) {
-  return Firestore.collection(table)
+/**
+ * Get documents by query. Return Promise<QuerySnapshot>
+ * @param {Object} query
+ */
+export function getInvoiceByQuery(query) {
+  return tableInvoiceRef
     .where(query.field, query.operator, query.value)
     .get()
-    .then( querySnapshot => querySnapshot.docs.map( doc => ({ id: doc.id, ...doc.data() })));
 }
 
 /**
