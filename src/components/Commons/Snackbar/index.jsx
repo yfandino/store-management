@@ -3,6 +3,7 @@ import { Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 const CustomSnackbar = (props) => {
+  const { type, message, onClose } = props;
   const [open, setOpen] = React.useState(props.open);
 
   const handleClose = () => {
@@ -12,13 +13,11 @@ const CustomSnackbar = (props) => {
   return (
     <Snackbar
       anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
-      // autoHideDuration={5000}
       open={open}
-      onClose={handleClose}
+      onClose={onClose || handleClose}
       transitionDuration={{ enter: 500, exit: 500 }}
-      message="Esto es un mensaje"
     >
-      <Alert severity={props.type} onClose={handleClose}>{props.message}</Alert>
+      <Alert severity={type} onClose={onClose || handleClose}>{message}</Alert>
     </Snackbar>  
   );
 }

@@ -72,15 +72,45 @@ const Form = () => {
     setLines(lines.filter( (_, i) => index !== i));
   };
 
+  const handleSnackbarClose = () => {
+    setError(null);
+  }
+
+  function validateForm (invoice) {
+    const { client, lines, totals } = invoice;
+    if (!client || !client.name || !client.phone || !client.address) {
+      return { message: "Debe completar todos los datos del cliente" };
+    }
+
+    if (!lines || !validateLines(lines)) {
+      return { message: "Debe completar correctamente las líneas de productos" };
+    }
+
+    if (!totals || !totals.taxable || !totals.totalTax || !totals.lineTotalPriceWithTax) {
+      return { message: "Error al rellenar la factura" };
+    }
+  }
+
+  function validateLines(lines) {
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (!line.description || !line.unitPrice) {
+        return false;
+      }
+    }
+
+    return true
+  }
+
   const onSave = (e) => {
     e.preventDefault();
     setIsSaving(true)
-
+    alert("Not implemented yet");
     const invoice = {
       client,
       lines
     }
-
+    setIsSaving(false)
     console.log(invoice);
   }
 
@@ -93,6 +123,13 @@ const Form = () => {
       lines,
       totals
     }
+    
+    const error = validateForm(newInvoice);
+    if (error) {
+      setIsCreating(false)
+      setError(error);
+      return;
+    }
 
     API_BILLING.addInvoice(newInvoice)
       .then( resultInvoice => {
@@ -104,10 +141,10 @@ const Form = () => {
         setIsCreating(false);
       });
   }
-
+  
   return (
     <>
-      {error && (<Snackbar open={true} message={error.message} type="error" />)}
+      {error && (<Snackbar open={!!error} message={error.message} type="error" onClose={handleSnackbarClose} />)}
       <Grid container direction="column" component="form" spacing={2} style={{ marginTop: 16 }}>
         <Grid item container spacing={2} justify="flex-end">
           <Grid item>
