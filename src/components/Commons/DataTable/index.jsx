@@ -1,9 +1,13 @@
 import React from 'react';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow,
+         Link, IconButton } from '@material-ui/core';
+import { VisibilityOutlined as ViewIcon } from '@material-ui/icons';
 
 const DataTable = (props) => {
-
-  const { columns, rows, page, rowsPerPage, setPage, setRowsPerPage, setIsLoading, pagination, noElevation } = props;
+  // TO-DO Actions need to be generic, now is only for view invoices
+  const { columns, rows, page, rowsPerPage, setPage, setRowsPerPage, setIsLoading, pagination,
+    noElevation, action } = props;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -30,6 +34,12 @@ const DataTable = (props) => {
                   {column.label}
                 </TableCell>
               ))}
+              {action && (
+                <TableCell
+                  align="center"
+                  style={{ minWidth: 50 }}
+                />
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -44,6 +54,15 @@ const DataTable = (props) => {
                       </TableCell>
                     );
                   })}
+                  {action && (
+                    <TableCell align="center">
+                      <Link component={RouterLink} to={`/billing/${row.invoiceNumber}`}>
+                        <IconButton size="small">
+                          <ViewIcon />
+                        </IconButton>
+                      </Link>
+                    </TableCell>
+                  )}
                 </TableRow>
               );
             })}
