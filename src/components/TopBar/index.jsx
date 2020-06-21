@@ -26,13 +26,13 @@ const Topbar = (props) => {
           <Link color="inherit" to="/" component={RouterLink}>
             Inicio
           </Link>
-          {pathnames.map( (_, index) => {
+          {pathnames.map( (path, index) => {
             const last = index === pathnames.length - 1;
             const to = `/${pathnames.slice(0, index + 1).join('/')}`;
 
             return last ? (
               <Typography color="textPrimary" key={to}>
-                {breadcrumbNameMap[to]}
+                {breadcrumbNameMap[to] || path}
               </Typography>
             ) : (
               <Link color="inherit" to={to} key={to} component={RouterLink}>

@@ -66,5 +66,7 @@ export async function addInvoice(invoice) {
   batch.set(statsRef, { invoiceCount: increment }, { merge: true });
   batch.set(invoiceRef, invoice);
 
-  return batch.commit();;
+  batch.commit();
+
+  return invoice;
 }

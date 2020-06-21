@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Grid, Button } from '@material-ui/core';
 
 import { API_BILLING } from '../../../firebase/api';
@@ -17,6 +18,7 @@ const Form = () => {
   const [lines, setLines] = useState([defaultLineValues]);
   const [totals, setTotals] = useState({});
   const [error, setError] = useState(null);
+  const history = useHistory();
 
   useEffect(function updateInvoice() {
     let updatedTotals = {
@@ -80,14 +82,16 @@ const Form = () => {
   const onCreate = (e) => {
     e.preventDefault();
 
-    const invoice = {
+    const newInvoice = {
       client,
       lines,
       totals
     }
 
-    API_BILLING.addInvoice(invoice)
-      .then( res => console.log("then res", res))
+    API_BILLING.addInvoice(newInvoice)
+      .then( resultInvoice => {
+        history.push(`/billing/${resultInvoice.invoiceNumber}`);
+      })
       .catch( err => {
         console.log("Error Add Invoice", err);
         setError({ message: "Ops, ha ocurrido un error al intentar crear la factura" });
