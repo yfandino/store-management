@@ -1,6 +1,6 @@
 import React from 'react';
 
-import DataTable from '../../DataTable';
+import DataTable from '../../Commons/DataTable';
 
 const columns = [
   { id: 'description', label: 'Descripción', minWidth: 100 },

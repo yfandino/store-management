@@ -6,6 +6,7 @@ import { API_BILLING } from '../../../firebase/api';
 import InvoiceTotals from './InvoiceTotals';
 import InvoiceClient from './InvoiceClient';
 import InvoiceLines from './InvoiceLines';
+import Snackbar from '../../Commons/Snackbar';
 import LoadingButton from '../../Commons/LoadingButton';
 
 const defaultLineValues = {

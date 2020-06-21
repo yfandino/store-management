@@ -1,6 +1,6 @@
 import React from 'react';
 
-import DataTable from '../../DataTable';
+import DataTable from '../../Commons/DataTable';
 
 const columns = [
   { id: 'taxable', label: 'Imponible (€)', minWidth: 80, align: 'right', format: (value) => value.toLocaleString('es-ES') },

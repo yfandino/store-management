@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { CircularProgress, Typography } from '@material-ui/core';
 
 import { API_BILLING } from '../../../firebase/api';
-import DataTable from '../../DataTable';
-import Snackbar from '../../Snackbar';
+import DataTable from '../../Commons/DataTable';
+import Snackbar from '../../Commons/Snackbar';
 
 const columns = [
   { id: 'invoiceNumber', label: 'Nº de Factura', minWidth: 100 },
