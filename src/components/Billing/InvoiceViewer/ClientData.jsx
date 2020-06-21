@@ -19,7 +19,7 @@ const InvoiceViewer = (props) => {
           <span style={{ textTransform: "uppercase", fontWeight: 600}}>Nº de Factura: </span>
           <span>{invoiceNumber}</span>
         </Typography>
-        <Typography>
+        <Typography align="right">
           <span style={{ textTransform: "uppercase", fontWeight: 600}}>Fecha: </span>
           <span>{new Date(date).toLocaleDateString()}</span>
         </Typography>

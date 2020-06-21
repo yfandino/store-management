@@ -35,6 +35,16 @@ const theme = createMuiTheme({
         }
       }
     },
+    MuiContainer: {
+      root: {
+        "& .grid__-invoice-sheet": {
+          padding: 32,
+          "@media print": {
+            padding: "8px 16px"
+          }
+        }
+      }
+    },
     MuiPaper: {
       elevation1: {
         "@media print": {

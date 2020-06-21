@@ -15,6 +15,7 @@ const Totals = (props) => {
 
   return (
     <DataTable
+      noElevation
       columns={columns}
       rows={[totals]}
     />

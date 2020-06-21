@@ -3,7 +3,7 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePag
 
 const DataTable = (props) => {
 
-  const { columns, rows, page, rowsPerPage, setPage, setRowsPerPage, setIsLoading, pagination } = props;
+  const { columns, rows, page, rowsPerPage, setPage, setRowsPerPage, setIsLoading, pagination, noElevation } = props;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -16,7 +16,7 @@ const DataTable = (props) => {
   };
   
   return (
-    <Paper>
+    <Paper elevation={noElevation ? 0 : 1}>
       <TableContainer>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
