@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Grid, Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import { API_BILLING } from '../../../firebase/api';
 import InvoiceTotals from './InvoiceTotals';
 import InvoiceClient from './InvoiceClient';
 import InvoiceLines from './InvoiceLines';
-import Snackbar from '../../Snackbar';
+import LoadingButton from '../../Commons/LoadingButton';
 
 const defaultLineValues = {
   units: 1,
@@ -18,6 +18,8 @@ const Form = () => {
   const [lines, setLines] = useState([defaultLineValues]);
   const [totals, setTotals] = useState({});
   const [error, setError] = useState(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const history = useHistory();
 
   useEffect(function updateInvoice() {
@@ -71,6 +73,8 @@ const Form = () => {
 
   const onSave = (e) => {
     e.preventDefault();
+    setIsSaving(true)
+
     const invoice = {
       client,
       lines
@@ -81,6 +85,7 @@ const Form = () => {
 
   const onCreate = (e) => {
     e.preventDefault();
+    setIsCreating(true)
 
     const newInvoice = {
       client,
@@ -95,6 +100,7 @@ const Form = () => {
       .catch( err => {
         console.log("Error Add Invoice", err);
         setError({ message: "Ops, ha ocurrido un error al intentar crear la factura" });
+        setIsCreating(false);
       });
   }
 
@@ -104,10 +110,27 @@ const Form = () => {
       <Grid container direction="column" component="form" spacing={2} style={{ marginTop: 16 }}>
         <Grid item container spacing={2} justify="flex-end">
           <Grid item>
-            <Button type="submit" variant="outlined" color="primary" onClick={onSave}>Guardar</Button>
+            <LoadingButton
+              type="submit"
+              variant="outlined"
+              color="primary"
+              disabled={isCreating || isSaving}
+              isLoading={isSaving}
+              onClick={onSave}
+            >
+              Guardar
+            </LoadingButton>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="primary" onClick={onCreate}>Crear</Button>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isCreating || isSaving}
+              isLoading={isCreating}
+              onClick={onCreate}>
+              Crear
+            </LoadingButton>
           </Grid>
         </Grid>
         
