@@ -18,8 +18,7 @@ const InvoicesTable = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  // const [error, setError] = useState(null);
-  const [error, setError] = useState({ message: "Esto es un mensaje de error "});
+  const [error, setError] = useState(null);
 
   useEffect( () => {
     function getInvoices() {
@@ -30,9 +29,9 @@ const InvoicesTable = () => {
         })
         .catch( err => {
           console.log("Error Invoice List", err);
-          setError(err);
-        });
-      setIsLoading(false);
+          setError({ message: "Ops, ha ocurrido un error" });
+        })
+        .then( () => setIsLoading(false));
     }
 
     getInvoices();
