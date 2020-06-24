@@ -12,7 +12,7 @@ const AuthRoutes = (props) => {
   return (
     <>
       <SideBar />
-      <main style={{ marginLeft: 90 }}>
+      <main style={{ marginLeft: 90, paddingBottom: 16 }}>
         <TopBar email={props.user.email}/>
         <Switch>
           <Route exact path="/" render={() => "HOME"}/>

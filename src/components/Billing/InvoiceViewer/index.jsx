@@ -45,7 +45,7 @@ const InvoiceViewer = () => {
     window.print();
   }
 
-  if(loading) return <CircularProgress />;
+  if(loading) return <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}><CircularProgress /></div>;
   if(error || !invoice) return <Snackbar open={true} message={error.message || "Ha ocurrido un error"} type="error"/>;
 
   return (
