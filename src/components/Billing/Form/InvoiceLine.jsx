@@ -15,7 +15,10 @@ const InvoiceLine = (props) => {
   let { lineData, lineIndex, onChange, onDelete } = props;
 
   const handleInputChange = (e) => {
-    const { name, value } = e.currentTarget;
+    let { name, value, type } = e.currentTarget;
+
+    if (type === "number") value = parseFloat(value);
+
     const line = { ...lineData, [name]: value };
     onChange(lineIndex, line);
   }
@@ -39,7 +42,7 @@ const InvoiceLine = (props) => {
             label={input.label}
             name={input.id}
             onChange={handleInputChange}
-            value={lineData[input.id] || ""}
+            value={input.type === "number" ? lineData[input.id] : lineData[input.id] || ""}
             InputProps={{
               readOnly: input.readOnly,
               endAdornment: input.endAdornment ? <InputAdornment position="end">{input.endAdornment}</InputAdornment> : null

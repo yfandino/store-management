@@ -3,7 +3,7 @@ import { Grid, Card, CardHeader, CardContent, TextField } from '@material-ui/cor
 
 const inputs = [
   { id: "name", label: "Nombre y Apellidos", type: "text"},
-  { id: "id", label: "Nº de documento", type: "text"},
+  { id: "id", label: "Documento de identidad", type: "text"},
   { id: "address", label: "Dirección", type: "text"},
   { id: "phone", label: "Teléfono", type: "tel"},
 ]
