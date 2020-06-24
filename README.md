@@ -19,5 +19,6 @@ REACT_APP_FIREBASE_MEASUREMENT_ID="XXX"
 ```
 4. Ejecutar la app
 ```
+firebase serve --only firestore
 npm start
 ```
