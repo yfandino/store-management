@@ -33,15 +33,18 @@ const Form = () => {
     }
     let totalProducts = 0;
     lines.reduce( (acc, current) => {
-      totalProducts += current.unitPrice ? (current.unitPrice * current.units) : 0;
-      acc.taxable += current.tax === 21
-        ? current.unitPrice && current.units ? (current.unitPrice * current.units) : 0
+      if (!current.units || !current.unitPrice) return acc;
+      totalProducts += current.unitPrice * current.units;
+      acc.taxable += current.tax === 21 ? (current.unitPrice * current.units) : 0;
+      acc.totalWidthDiscount += current.discount 
+        ? current.units * current.unitPrice * (current.discount / 100) 
         : 0;
-      acc.totalTax = acc.taxable * 0.21;
-      acc.totalWidthDiscount = current.discount 
-        ? acc.totalWidthDiscount + current.unitPrice * (current.discount / 100) 
-        : acc.totalWidthDiscount || 0;
-      acc.total = totalProducts + acc.totalTax - acc.totalWidthDiscount;
+      acc.totalTax += current.tax == 21
+        ? current.discount
+          ? (current.units * current.unitPrice -  (current.units * current.unitPrice * current.discount / 100)) * 0.21
+          : current.units * current.unitPrice * 0.21
+        : 0;
+      acc.total = totalProducts - acc.totalWidthDiscount + acc.totalTax;
       return acc;
     }, updatedTotals);
 
@@ -55,7 +58,7 @@ const Form = () => {
     });
     setLines(updatedLines);
   };
-
+  
   function calculateLineTotal(lineData) {
     if(!lineData.units || !lineData.unitPrice) return lineData;
     let totalUnitsPrice = lineData.units * lineData.unitPrice;
@@ -86,7 +89,7 @@ const Form = () => {
       return { message: "Debe completar correctamente las líneas de productos" };
     }
 
-    if (!totals || !totals.taxable || !totals.totalTax || !totals.lineTotalPriceWithTax) {
+    if (!totals || !totals.taxable || !totals.totalTax || !totals.total) {
       return { message: "Error al rellenar la factura" };
     }
   }
