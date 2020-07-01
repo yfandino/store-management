@@ -39,7 +39,7 @@ const Form = () => {
       acc.totalWidthDiscount += current.discount 
         ? current.units * current.unitPrice * (current.discount / 100) 
         : 0;
-      acc.totalTax += current.tax == 21
+      acc.totalTax += current.tax === 21
         ? current.discount
           ? (current.units * current.unitPrice -  (current.units * current.unitPrice * current.discount / 100)) * 0.21
           : current.units * current.unitPrice * 0.21
