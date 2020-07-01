@@ -88,9 +88,15 @@ export default InvoiceViewer;
 
 const TermsAndConditions = () => (
   <div>
-    <Typography variant="h6" gutterBottom style={{ fontSize: "0.7rem", fontWeight: 600, marginTop: 24 }}>Términos y condiciones</Typography>
-    <Typography style={{ fontSize: "0.7rem" }}>El cliente dispone de 2 años de garantía (Primer año por parte de iRiparo López de Hoyos, segundo año directamente con el fabricante).</Typography>
-    <Typography style={{ fontSize: "0.7rem" }}>No se realizan devoluciones de dinero. Condiciones en tienda.</Typography>
+    <Typography variant="h6" gutterBottom style={{ fontSize: "0.7rem", fontWeight: 600, marginTop: 24 }}>
+      Términos y condiciones
+    </Typography>
+    <Typography style={{ fontSize: "0.7rem" }}>
+      La garantía del producto se específica en el documento de garantía si aplica.
+    </Typography>
+    <Typography style={{ fontSize: "0.7rem" }}>
+      No se realizan devoluciones de dinero. Condiciones en tienda.
+    </Typography>
   </div>
   
 )
