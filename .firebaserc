@@ -1,6 +1,7 @@
 {
   "projects": {
     "default": "store-management-dev",
-    "dev": "store-management-dev"
+    "dev": "store-management-dev",
+    "pro": "store-management-pro"
   }
 }
