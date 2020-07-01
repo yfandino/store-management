@@ -35,16 +35,21 @@ const Form = () => {
     lines.reduce( (acc, current) => {
       if (!current.units || !current.unitPrice) return acc;
       totalProducts += current.unitPrice * current.units;
+      totalProducts =  Math.round((totalProducts + Number.EPSILON) * 100) / 100;
       acc.taxable += current.tax === 21 ? (current.unitPrice * current.units) : 0;
+      acc.taxable =  Math.round((acc.taxable + Number.EPSILON) * 100) / 100;
       acc.totalWidthDiscount += current.discount 
         ? current.units * current.unitPrice * (current.discount / 100) 
         : 0;
+      acc.totalWidthDiscount =  Math.round((acc.totalWidthDiscount + Number.EPSILON) * 100) / 100;
       acc.totalTax += current.tax === 21
         ? current.discount
-          ? (current.units * current.unitPrice -  (current.units * current.unitPrice * current.discount / 100)) * 0.21
+          ? (current.units * current.unitPrice - (current.units * current.unitPrice * current.discount / 100)) * 0.21
           : current.units * current.unitPrice * 0.21
         : 0;
+      acc.totalTax =  Math.round((acc.totalTax + Number.EPSILON) * 100) / 100;
       acc.total = totalProducts - acc.totalWidthDiscount + acc.totalTax;
+      acc.total = Math.round((acc.total + Number.EPSILON) * 100) / 100;
       return acc;
     }, updatedTotals);
 
@@ -64,6 +69,7 @@ const Form = () => {
     let totalUnitsPrice = lineData.units * lineData.unitPrice;
     let lineTotalWithDiscount = totalUnitsPrice - (totalUnitsPrice * ((lineData.discount/100) || 0));
     let lineTotalPriceWithTax = lineTotalWithDiscount + (lineTotalWithDiscount * (lineData.tax/100));
+    lineTotalPriceWithTax = Math.round((lineTotalWithDiscount + Number.EPSILON) * 100) / 100
     return { ...lineData, lineTotalPriceWithTax };
   }
   

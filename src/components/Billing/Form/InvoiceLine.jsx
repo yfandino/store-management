@@ -4,7 +4,7 @@ import { Delete as DeleteIcon } from '@material-ui/icons';
 
 const inputs = [
   { id: "description", label: "Descripción", type: "text"},
-  { id: "units", label: "Unidades", type: "number", endAdornment: "€"},
+  { id: "units", label: "Unidades", type: "number"},
   { id: "unitPrice", label: "Precio unitario", type: "number", endAdornment: "€"},
   { id: "discount", label: "Descuento", type: "number", endAdornment: "%"},
   { id: "tax", label: "IVA", type: "number", endAdornment: "%"},
@@ -30,7 +30,7 @@ const InvoiceLine = (props) => {
   return (
     <Grid container alignItems="center" spacing={2}>
       {inputs.map( (input, index) => (
-        <Grid item xs={index === 0 ? 6 : true} key={input.id}>
+        <Grid item md={index === 0 ? 4 : true} lg={index === 0 ? 6 : true} key={input.id}>
           <TextField
             variant="outlined"
             size="small"

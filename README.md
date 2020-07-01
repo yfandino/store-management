@@ -24,6 +24,6 @@ REACT_APP_TABLE_CLIENT="XXX"
 ```
 4. Ejecutar la app
 ```
-firebase serve --only firestore
+firebase emulators:start 
 npm start
 ```
