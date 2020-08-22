@@ -48,6 +48,7 @@ const SignIn = (props) => {
     Auth.onAuthStateChanged( user => {
       if (user) history.push('/');
     });
+    // eslint-disable-next-line
   }, []);
 
   const onSubmit = (e) => {
