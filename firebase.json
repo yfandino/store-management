@@ -4,6 +4,9 @@
     "indexes": "firestore.indexes.json"
   },
   "emulators": {
+    "hosting": {
+      "port": 5001
+    },
     "firestore": {
       "port": 5000
     },
