@@ -8,7 +8,7 @@ const columns = [
   { id: 'unitPrice', label: 'Precio unitario (€)', minWidth: 170 },
   { id: 'discount', label: 'Descuento (%)', minWidth: 80, align: 'right' },
   { id: 'tax', label: 'IVA (%)', minWidth: 80, align: 'right' },
-  { id: 'lineTotalPriceWithTax', label: 'Total (€)', minWidth: 80, align: 'right', format: (value) => value.toLocaleString('es-ES') },
+  { id: 'total', label: 'Total (€)', minWidth: 80, align: 'right', format: (value) => value.toLocaleString('es-ES') },
 ];
 
 const ProductLines = (props) => {
