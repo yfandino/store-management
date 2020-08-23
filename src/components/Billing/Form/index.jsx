@@ -57,21 +57,9 @@ const Form = () => {
   }, [lines]);
 
   const onLineChange = (index, data) => {
-    let updatedLines = lines.map( (line, i) => {
-      if (index !== i) return line;
-      return calculateLineTotal(data);
-    });
+    let updatedLines = lines.map( (line, i) => index !== i ? line : data);
     setLines(updatedLines);
   };
-  
-  function calculateLineTotal(lineData) {
-    if(!lineData.units || !lineData.unitPrice) return lineData;
-    let totalUnitsPrice = lineData.units * lineData.unitPrice;
-    let lineTotalWithDiscount = totalUnitsPrice - (totalUnitsPrice * ((lineData.discount/100) || 0));
-    let lineTotalPriceWithTax = lineTotalWithDiscount + (lineTotalWithDiscount * (lineData.tax/100));
-    lineTotalPriceWithTax = Math.round((lineTotalWithDiscount + Number.EPSILON) * 100) / 100
-    return { ...lineData, lineTotalPriceWithTax };
-  }
   
   const onAddLine = () => {
     setLines(lines.concat([defaultLineValues]));
@@ -103,7 +91,7 @@ const Form = () => {
   function validateLines(lines) {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      if (!line.description || !line.unitPrice) {
+      if (!line.description || line.unitPrice == null || line.unitPrice < 0) {
         return false;
       }
     }

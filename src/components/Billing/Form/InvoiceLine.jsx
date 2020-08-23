@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { Grid, IconButton, InputAdornment, TextField } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 
@@ -8,19 +8,37 @@ const inputs = [
   { id: "unitPrice", label: "Precio unitario", type: "number", endAdornment: "€"},
   { id: "discount", label: "Descuento", type: "number", endAdornment: "%"},
   { id: "tax", label: "IVA", type: "number", endAdornment: "%"},
-  { id: "lineTotalPriceWithTax", label: "Precio", type: "number", endAdornment: "€", readOnly: true}
+  { id: "total", label: "Precio", type: "number", endAdornment: "€", readOnly: true}
 ];
 
 const InvoiceLine = (props) => {
-  let { lineData, lineIndex, onChange, onDelete } = props;
+  const { lineIndex, onChange, onDelete } = props;
+  const [data, setData] = useState(props.lineData);
+
+  useEffect(() => {
+    onChange(lineIndex, data);
+  }, [lineIndex, data]);
 
   const handleInputChange = (e) => {
-    let { name, value, type } = e.currentTarget;
+    let { name, value } = e.currentTarget;
+    const line = calculateTotal({ ...data, [name]: value });
+    setData(line);
+  }
 
-    if (type === "number") value = parseFloat(value);
+  function calculateTotal(line) {
+    let { units, unitPrice, discount, tax } = line;
+    if(!units || !unitPrice) {
+      delete line.total;
+      return line
+    };
 
-    const line = { ...lineData, [name]: value };
-    onChange(lineIndex, line);
+    unitPrice = parseFloat(unitPrice.replace(',','.'));
+    
+    let totalUnitsPrice = units * unitPrice;
+    let totalDiscount = totalUnitsPrice * ((discount / 100) || 0);
+    let totalTax = (totalUnitsPrice - totalDiscount) * (tax === 21 ? 0.21 : 0);
+    let total = (totalUnitsPrice + totalTax - totalDiscount).toFixed(2);
+    return { ...line, total };
   }
 
   const handleDelete = (e) => {
@@ -42,7 +60,7 @@ const InvoiceLine = (props) => {
             label={input.label}
             name={input.id}
             onChange={handleInputChange}
-            value={input.type === "number" ? lineData[input.id] : lineData[input.id] || ""}
+            value={data[input.id] || ""}
             InputProps={{
               readOnly: input.readOnly,
               endAdornment: input.endAdornment ? <InputAdornment position="end">{input.endAdornment}</InputAdornment> : null
