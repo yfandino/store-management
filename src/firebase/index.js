@@ -25,3 +25,10 @@ export const SESSION = firebase.auth.Auth.Persistence.SESSION;
 
 export const Firestore = firebase.firestore();
 export const FieldValue = firebase.firestore.FieldValue;
+
+if (window.location.hostname === "localhost") {
+  Firestore.settings({
+    host: "localhost:5000",
+    ssl: false
+  });
+}
