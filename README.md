@@ -27,3 +27,11 @@ REACT_APP_TABLE_CLIENT="XXX"
 firebase emulators:start 
 npm start
 ```
+5. Generar paquete
+```
+npm run build:dev
+```
+6. Desplegar en Firebase
+```
+firebase deploy
+```
