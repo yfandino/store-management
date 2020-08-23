@@ -82,7 +82,7 @@ const Form = () => {
       return { message: "Debe completar correctamente las líneas de productos" };
     }
 
-    if (!totals || !totals.taxable || !totals.totalTax || !totals.total) {
+    if (!totals || !totals.total) {
       return { message: "Error al rellenar la factura" };
     }
   }
@@ -90,7 +90,8 @@ const Form = () => {
   function validateLines(lines) {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      if (!line.description || line.unitPrice == null || line.unitPrice < 0) {
+      debugger
+      if (!line.description || line.unitPrice == null || line.unitPrice < 0 || ![0, 21].includes(parseInt(line.tax))) {
         return false;
       }
     }
