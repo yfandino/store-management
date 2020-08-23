@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Grid } from '@material-ui/core';
 
@@ -11,12 +11,12 @@ import LoadingButton from '../../Commons/LoadingButton';
 
 const defaultLineValues = {
   units: 1,
-  tax: 21,
+  tax: 21
 };
 
 const Form = () => {
   const [client, setClient] = useState({});
-  const [lines, setLines] = useState([defaultLineValues]);
+  const [lines, setLines] = useState([{ ...defaultLineValues, id: Date.now() }]);
   const [totals, setTotals] = useState({});
   const [error, setError] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -56,18 +56,17 @@ const Form = () => {
     setTotals(updatedTotals);
   }, [lines]);
 
-  const onLineChange = (index, data) => {
-    let updatedLines = lines.map( (line, i) => index !== i ? line : data);
-    setLines(updatedLines);
-  };
+  const onLineChange = useCallback((index, data) => {
+    setLines(lines => lines.map((line, i) => index !== i ? line : data));
+  }, []);
   
   const onAddLine = () => {
-    setLines(lines.concat([defaultLineValues]));
+    setLines(lines.concat([{ ...defaultLineValues, id: Date.now() }]));
   };
 
-  const onDeleteLine = index => {
-    setLines(lines.filter( (_, i) => index !== i));
-  };
+  const onDeleteLine = useCallback(index => {
+    setLines(lines => lines.filter( (_, i) => index !== i));
+  }, []);
 
   const handleSnackbarClose = () => {
     setError(null);

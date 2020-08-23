@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Grid, Card, CardHeader, CardContent, TextField } from '@material-ui/core';
 
 const inputs = [
@@ -50,4 +50,4 @@ const InvoiceClient = (props) => {
   );
 }
 
-export default InvoiceClient;
+export default memo(InvoiceClient);
