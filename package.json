@@ -19,7 +19,7 @@
     "env-cmd": "^10.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "start firebase emulators:start --only firestore && react-scripts start",
     "build:dev": "env-cmd -f .env.development react-scripts build",
     "build": "react-scripts build",
     "test": "react-scripts test",
