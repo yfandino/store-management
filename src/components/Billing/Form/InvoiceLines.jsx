@@ -20,7 +20,7 @@ const InvoiceLines = (props) => {
         <CardContent>
           {lines.map( (line, index) => (
             <InvoiceLine
-              key={index}
+              key={line.id}
               lineData={line}
               lineIndex={index}
               onChange={onChange}

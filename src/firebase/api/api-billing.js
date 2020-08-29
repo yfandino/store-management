@@ -15,15 +15,17 @@ export function getInvoices(limit = 10) {
     .get();
 }
 
-export function goNextPage(limit = 10, docSnapshot) {
+export function goNextPage(limit = 10, docSnapshots) {
   return tableInvoiceRef
-    .startAfter(docSnapshot)
+    .orderBy("date", "desc")
+    .startAfter(docSnapshots[docSnapshots.length - 1])
     .limit(limit);
 }
 
-export function goPreviousPage (limit = 10, docSnapshot) {
+export function goPreviousPage (limit = 10, docSnapshots) {
   return tableInvoiceRef
-    .endBefore(docSnapshot)
+    .orderBy("date", "desc")
+    .endBefore(docSnapshots[0])
     .limitToLast(limit);
 }
 

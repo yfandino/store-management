@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Grid } from '@material-ui/core';
 
@@ -11,12 +11,12 @@ import LoadingButton from '../../Commons/LoadingButton';
 
 const defaultLineValues = {
   units: 1,
-  tax: 21,
+  tax: 21
 };
 
 const Form = () => {
   const [client, setClient] = useState({});
-  const [lines, setLines] = useState([defaultLineValues]);
+  const [lines, setLines] = useState([{ ...defaultLineValues, id: Date.now() }]);
   const [totals, setTotals] = useState({});
   const [error, setError] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -56,18 +56,17 @@ const Form = () => {
     setTotals(updatedTotals);
   }, [lines]);
 
-  const onLineChange = (index, data) => {
-    let updatedLines = lines.map( (line, i) => index !== i ? line : data);
-    setLines(updatedLines);
-  };
+  const onLineChange = useCallback((index, data) => {
+    setLines(lines => lines.map((line, i) => index !== i ? line : data));
+  }, []);
   
   const onAddLine = () => {
-    setLines(lines.concat([defaultLineValues]));
+    setLines(lines.concat([{ ...defaultLineValues, id: Date.now() }]));
   };
 
-  const onDeleteLine = index => {
-    setLines(lines.filter( (_, i) => index !== i));
-  };
+  const onDeleteLine = useCallback(index => {
+    setLines(lines => lines.filter( (_, i) => index !== i));
+  }, []);
 
   const handleSnackbarClose = () => {
     setError(null);
@@ -83,7 +82,7 @@ const Form = () => {
       return { message: "Debe completar correctamente las líneas de productos" };
     }
 
-    if (!totals || !totals.taxable || !totals.totalTax || !totals.total) {
+    if (!totals || !totals.total) {
       return { message: "Error al rellenar la factura" };
     }
   }
@@ -91,7 +90,7 @@ const Form = () => {
   function validateLines(lines) {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      if (!line.description || line.unitPrice == null || line.unitPrice < 0) {
+      if (!line.description || line.unitPrice == null || line.unitPrice < 0 || ![0, 21].includes(parseInt(line.tax))) {
         return false;
       }
     }
