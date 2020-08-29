@@ -19,23 +19,51 @@ const InvoicesTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [error, setError] = useState(null);
+  const [docSnapshots, setDocSnapshots] = useState(null);
 
-  useEffect( () => {
+  useEffect(() => {
     function getInvoices() {
       API_BILLING.getInvoices(rowsPerPage)
-        .then( querySnapshot => {
+        .then(querySnapshot => {
           const invoices = querySnapshot.docs.map( doc => ({ id: doc.id, ...doc.data() }));
           setRows(parseData(invoices));
+          setDocSnapshots(querySnapshot.docs);
         })
-        .catch( err => {
-          console.log("Error Invoice List", err);
+        .then(() => setIsLoading(false))
+        .catch(err => {
+          console.log("Error Invoice List: getting page one", err);
           setError({ message: "Ops, ha ocurrido un error" });
-        })
-        .then( () => setIsLoading(false));
+        });
     }
 
     getInvoices();
   }, [rowsPerPage]);
+
+  function goNextPage() {
+    setIsLoading(true);
+
+    API_BILLING.goNextPage(10, docSnapshots)
+      .get()
+      .then( querySnapshot => {
+        const invoices = querySnapshot.docs.map( doc => ({ id: doc.id, ...doc.data() }));
+        setRows(parseData(invoices));
+        setDocSnapshots(querySnapshot.docs);
+        setIsLoading(false);
+      })
+  }
+
+  function goPreviousPage() {
+    setIsLoading(true);
+
+    API_BILLING.goPreviousPage(10, docSnapshots)
+      .get()
+      .then( querySnapshot => {
+        const invoices = querySnapshot.docs.map( doc => ({ id: doc.id, ...doc.data() }));
+        setRows(parseData(invoices));
+        setDocSnapshots(querySnapshot.docs);
+        setIsLoading(false);
+      })
+  }
 
   function parseData(data) {
     return data.map( e => ({
@@ -60,6 +88,8 @@ const InvoicesTable = () => {
       page={page}
       rowsPerPage={rowsPerPage}
       setPage={setPage}
+      onNextPage={goNextPage}
+      onPreviousPage={goPreviousPage}
       setRowsPerPage={setRowsPerPage}
       setIsLoading={setIsLoading}
       pagination

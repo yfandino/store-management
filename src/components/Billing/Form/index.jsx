@@ -90,7 +90,6 @@ const Form = () => {
   function validateLines(lines) {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      debugger
       if (!line.description || line.unitPrice == null || line.unitPrice < 0 || ![0, 21].includes(parseInt(line.tax))) {
         return false;
       }
