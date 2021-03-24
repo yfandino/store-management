@@ -81,7 +81,7 @@ const Form = () => {
   }
 
   function validateForm (invoice) {
-    const { client, lines, totals } = invoice;
+    const { lines, totals } = invoice;
     if (!client || !client.name || !client.phone || !client.address) {
       return { message: "Debe completar todos los datos del cliente" };
     }
@@ -123,7 +123,7 @@ const Form = () => {
     setIsCreating(true)
 
     const newInvoice = {
-      client,
+      client: clientRef,
       lines,
       totals
     }

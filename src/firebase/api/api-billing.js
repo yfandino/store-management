@@ -51,7 +51,6 @@ export function getInvoiceByQuery(query) {
  * @param {Object} invoice 
  */
 export async function addInvoice(invoice) {
-  const clientRef = addClient(invoice.client);
   const statsRef = tableInvoiceRef.doc('--stats--');
   const invoiceRef = tableInvoiceRef.doc();
 
@@ -61,14 +60,13 @@ export async function addInvoice(invoice) {
   const increment = FieldValue.increment(1);
   const batch = Firestore.batch();
 
-  invoice.client.ref = clientRef;
   invoice.date = Date.now();
   invoice.invoiceNumber = `FI${new Date().getFullYear()}-${invoiceCount + 1}`;
 
   batch.set(statsRef, { invoiceCount: increment }, { merge: true });
   batch.set(invoiceRef, invoice);
 
-  batch.commit();
+  await batch.commit();
 
   return invoice;
 }
