@@ -1,5 +1,4 @@
 import { Firestore, FieldValue } from '../index';
-import { addClient } from './api-clients';
 
 const REACT_APP_TABLE_INVOICE = process.env.REACT_APP_TABLE_INVOICE;
 const tableInvoiceRef = Firestore.collection(REACT_APP_TABLE_INVOICE);

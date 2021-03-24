@@ -25,12 +25,10 @@ const InvoiceViewer = () => {
       value: invoiceNumber
     })
     .then( querySnapshot => {
-      const invoice = querySnapshot.docs.map( doc => doc.data());
-      if (querySnapshot.empty) throw new Error("Factura no encontrada")
-        
-      if (invoice.length === 1) {
-        setInvoice(invoice[0]);
-      }
+      if (querySnapshot.empty) throw new Error("Factura no encontrada");
+
+      const invoice = querySnapshot.docs.map( doc => doc.data())[0];
+      setInvoice(invoice);
     })
     .catch( err => {
       console.error("Error Get Invoice", JSON.stringify(err, null, 2))

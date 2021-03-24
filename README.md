@@ -2,7 +2,7 @@
 
 1. Instalar dependencias
 ```
-npm start
+npm install
 ```
 2. Crear .env.development
 3. Añadir las variables de entorno

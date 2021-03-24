@@ -25,6 +25,8 @@ const AddClient = (props) => {
       return
     }
 
+    data.id = data.id.toUpperCase();
+
     const clientRef = API_CLIENTS.addClient(data);
     props.setClientRef(clientRef);
     props.setIsOpen(false);

@@ -123,7 +123,10 @@ const Form = () => {
     setIsCreating(true)
 
     const newInvoice = {
-      client: clientRef,
+      client: {
+        ...client,
+        ref: clientRef
+      },
       lines,
       totals
     }
