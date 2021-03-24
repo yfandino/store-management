@@ -15,13 +15,21 @@ const defaultLineValues = {
 };
 
 const Form = () => {
-  const [client, setClient] = useState({});
+  const [client, setClient] = useState(null);
+  const [clientRef, setClientRef] = useState(null);
   const [lines, setLines] = useState([{ ...defaultLineValues, id: Date.now() }]);
   const [totals, setTotals] = useState({});
   const [error, setError] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const history = useHistory();
+
+  useEffect(function getClientData() {
+    if (!clientRef) return;
+
+    clientRef.get()
+      .then(client => setClient(client.data()));
+  }, [clientRef]);
 
   useEffect(function updateInvoice() {
     let updatedTotals = {
@@ -173,7 +181,7 @@ const Form = () => {
         </Grid>
         
         <Grid item>
-          <InvoiceClient onChange={setClient}/>
+          <InvoiceClient setClientRef={setClientRef} client={client}/>
         </Grid>
         
         <Grid item container direction="column">

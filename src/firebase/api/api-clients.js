@@ -7,3 +7,8 @@ export function addClient(data) {
   clientRef.set(data);
   return clientRef;
 }
+
+export function getClient(id) {
+  const clientRef = Firestore.collection(REACT_APP_TABLE_CLIENT).doc(id);
+  return clientRef.get();
+}
