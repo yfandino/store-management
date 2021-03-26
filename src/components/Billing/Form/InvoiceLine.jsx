@@ -17,7 +17,7 @@ const InvoiceLine = (props) => {
 
   useEffect(() => {
     onChange(lineIndex, data);
-  }, [lineIndex, data]);
+  }, [lineIndex, data, onChange]);
 
   const handleInputChange = (e) => {
     let { name, value } = e.currentTarget;

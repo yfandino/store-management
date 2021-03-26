@@ -1,18 +1,41 @@
-import React from 'react';
-import { Grid, Card, CardHeader, CardContent, TextField } from '@material-ui/core';
-
-const inputs = [
-  { id: "name", label: "Nombre y Apellidos", type: "text"},
-  { id: "id", label: "Documento de identidad", type: "text"},
-  { id: "address", label: "Dirección", type: "text"},
-  { id: "phone", label: "Teléfono", type: "tel"},
-]
+import React, { memo, useRef, useState } from 'react';
+import { Grid, Card, CardHeader, CardContent, TextField, Button } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import LoadingButton from "../../Commons/LoadingButton";
+import { API_CLIENTS } from "../../../firebase/api"
+import AddClient from "./AddClient";
 
 const InvoiceClient = (props) => {
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.currentTarget;
-    props.onChange( prevState => ({ ...prevState, [name]: value }));
+  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [isFound, setIsFound] = useState(null);
+  const clientIdRef = useRef();
+
+  const handleClick = () => {
+    setIsSearching(true);
+
+    const clientId = clientIdRef.current.value.toUpperCase();
+
+    if (clientId) {
+      API_CLIENTS.getClient(clientId)
+        .then(clientSnapshot => {
+          if (!clientSnapshot.exists) setIsFound(false);
+          else {
+            setIsFound(true);
+            props.setClientRef(clientSnapshot.ref);
+          }
+        })
+        .catch((err) => console.log("Error getting client", err))
+    }
+
+    setIsSearching(false);
+  }
+
+  const handleOpen = () => {
+    clientIdRef.current.value = "";
+    setIsFound(null);
+    setIsAddingNew(true);
   }
 
   return (
@@ -23,31 +46,60 @@ const InvoiceClient = (props) => {
         titleTypographyProps={{ color: "primary", className: "card__card-header--invoice-title" }}
       />
       <CardContent>
-        <Grid container spacing={2}>
-          {inputs.map( (input, index) => (
-            <Grid item xs={index % 2 === 0 ? 4 : true} key={input.id}>
+          <Grid container spacing={2} alignItems="center">
+            {isAddingNew && (
+              <AddClient
+                isOpen={isAddingNew}
+                setIsOpen={setIsAddingNew}
+                setClientRef={props.setClientRef}
+                setClient={props.setClient}
+              />
+            )}
+            <Grid item xs={2}>
               <TextField
                 variant="outlined"
                 size="small"
                 margin="normal"
                 fullWidth
                 required
-                type={input.type}
-                id={input.id}
-                label={input.label}
-                name={input.id}
-                autoFocus={index === 0}
+                type="text"
+                id="id"
+                label="Documento de identidad"
+                name="id"
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={handleInputChange}
+                inputRef={clientIdRef}
               />
             </Grid>
-          ))}
-        </Grid>
+            <Grid item>
+              <LoadingButton
+                type="button"
+                variant="contained"
+                color="primary"
+                disabled={isSearching}
+                isLoading={isSearching}
+                onClick={handleClick}
+              >
+                Buscar
+              </LoadingButton>
+            </Grid>
+            <Grid item>
+              <Button
+                type="button"
+                variant="text"
+                color="primary"
+                onClick={handleOpen}
+              >
+                Crear Nuevo
+              </Button>
+            </Grid>
+          </Grid>
+        {props.client && (<Alert severity="success">Cliente: {Object.values(props.client).join(',').replaceAll(',', ', ')}</Alert>)}
+        {isFound === false && (<Alert severity="error">Cliente con documento {clientIdRef.current.value} no encontrado</Alert>)}
       </CardContent>
     </Card>
   );
 }
 
-export default InvoiceClient;
+export default memo(InvoiceClient);

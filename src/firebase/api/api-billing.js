@@ -1,5 +1,4 @@
 import { Firestore, FieldValue } from '../index';
-import { addClient } from './api-clients';
 
 const REACT_APP_TABLE_INVOICE = process.env.REACT_APP_TABLE_INVOICE;
 const tableInvoiceRef = Firestore.collection(REACT_APP_TABLE_INVOICE);
@@ -15,15 +14,17 @@ export function getInvoices(limit = 10) {
     .get();
 }
 
-export function goNextPage(limit = 10, docSnapshot) {
+export function goNextPage(limit = 10, docSnapshots) {
   return tableInvoiceRef
-    .startAfter(docSnapshot)
+    .orderBy("date", "desc")
+    .startAfter(docSnapshots[docSnapshots.length - 1])
     .limit(limit);
 }
 
-export function goPreviousPage (limit = 10, docSnapshot) {
+export function goPreviousPage (limit = 10, docSnapshots) {
   return tableInvoiceRef
-    .endBefore(docSnapshot)
+    .orderBy("date", "desc")
+    .endBefore(docSnapshots[0])
     .limitToLast(limit);
 }
 
@@ -49,7 +50,6 @@ export function getInvoiceByQuery(query) {
  * @param {Object} invoice 
  */
 export async function addInvoice(invoice) {
-  const clientRef = addClient(invoice.client);
   const statsRef = tableInvoiceRef.doc('--stats--');
   const invoiceRef = tableInvoiceRef.doc();
 
@@ -59,14 +59,13 @@ export async function addInvoice(invoice) {
   const increment = FieldValue.increment(1);
   const batch = Firestore.batch();
 
-  invoice.client.ref = clientRef;
   invoice.date = Date.now();
   invoice.invoiceNumber = `FI${new Date().getFullYear()}-${invoiceCount + 1}`;
 
   batch.set(statsRef, { invoiceCount: increment }, { merge: true });
   batch.set(invoiceRef, invoice);
 
-  batch.commit();
+  await batch.commit();
 
   return invoice;
 }

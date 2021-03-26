@@ -7,9 +7,11 @@ import { VisibilityOutlined as ViewIcon } from '@material-ui/icons';
 const DataTable = (props) => {
   // TO-DO Actions need to be generic, now is only for view invoices
   const { columns, rows, page, rowsPerPage, setPage, setRowsPerPage, setIsLoading, pagination,
-    noElevation, action } = props;
+    noElevation, action, onNextPage, onPreviousPage } = props;
 
   const handleChangePage = (event, newPage) => {
+    if (page < newPage) onNextPage();
+    else onPreviousPage();
     setPage(newPage);
   };
 
@@ -29,7 +31,7 @@ const DataTable = (props) => {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ minWidth: column.minWidth, whiteSpace: "nowrap" }}
                 >
                   {column.label}
                 </TableCell>
@@ -69,15 +71,17 @@ const DataTable = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {pagination && (<TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />)}
+      {pagination && (
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={-1}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      )}
     </Paper>
   );
 };

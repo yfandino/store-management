@@ -18,5 +18,6 @@ dist
 .DS_Store
 *.env.*
 *.png
+.idea
 
 *debug.log*
