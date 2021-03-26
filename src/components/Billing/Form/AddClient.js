@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import { Dialog, DialogContent, DialogTitle, DialogActions, TextField, Button } from '@material-ui/core';
+import Snackbar from '../../Commons/Snackbar';
 import { API_CLIENTS } from "../../../firebase/api"
 
 const inputs = [
@@ -7,11 +8,13 @@ const inputs = [
   { id: "id", label: "Documento de identidad", type: "text"},
   { id: "address", label: "Dirección", type: "text"},
   { id: "phone", label: "Teléfono", type: "tel"},
+  { id: "email", label: "Email", type: "text"}
 ]
 
 const AddClient = (props) => {
 
   const [data, setData] = useState({});
+  const [error, setError] = useState(null);
 
   const onChange = (e) => {
     e.preventDefault();
@@ -20,20 +23,24 @@ const AddClient = (props) => {
   }
 
   const addClient = () => {
-    if(!data.name || !data.id || !data.address || !data.phone) {
+    if(!data.name || !data.id || !data.address || !(data.phone || data.email)) {
       console.log('Invalid client data')
       return
     }
 
     data.id = data.id.toUpperCase();
 
-    const clientRef = API_CLIENTS.addClient(data);
-    props.setClientRef(clientRef);
-    props.setIsOpen(false);
+    API_CLIENTS.addClient(data)
+      .then(clientRef => {
+        props.setClientRef(clientRef);
+        props.setIsOpen(false);
+      })
+      .catch(err => setError(err));
   }
 
   return (
     <Dialog open={props.isOpen} fullScreen>
+      {error && (<Snackbar open={!!error} message={error} type="error" />)}
       <form autoComplete="off">
         <DialogTitle>Añadir nuevo cliente</DialogTitle>
         <DialogContent>

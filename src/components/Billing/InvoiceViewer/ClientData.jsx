@@ -12,7 +12,8 @@ const InvoiceViewer = (props) => {
         <Typography>{client.name}</Typography>
         <Typography>{client.id}</Typography>
         <Typography>{client.address}</Typography>
-        <Typography>{client.phone}</Typography>
+        {client.phone && (<Typography>{client.phone}</Typography>)}
+        {client.email && (<Typography>{client.email}</Typography>)}
       </Grid>
       <Grid item>
         <Typography>

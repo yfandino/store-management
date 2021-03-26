@@ -82,9 +82,6 @@ const Form = () => {
 
   function validateForm (invoice) {
     const { lines, totals } = invoice;
-    if (!client || !client.name || !client.phone || !client.address) {
-      return { message: "Debe completar todos los datos del cliente" };
-    }
 
     if (!lines || !validateLines(lines)) {
       return { message: "Debe completar correctamente las líneas de productos" };
@@ -115,7 +112,6 @@ const Form = () => {
       lines
     }
     setIsSaving(false)
-    console.log(invoice);
   }
 
   const onCreate = (e) => {

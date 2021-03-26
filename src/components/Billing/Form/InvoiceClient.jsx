@@ -15,19 +15,21 @@ const InvoiceClient = (props) => {
   const handleClick = () => {
     setIsSearching(true);
 
-    API_CLIENTS.getClient(clientIdRef.current.value)
-      .then(clientSnapshot => {
-        if (!clientSnapshot.exists) setIsFound(false);
-        else {
-          setIsFound(true);
-          props.setClientRef(clientSnapshot.ref);
-          props.setClient(clientSnapshot.data());
-        }
-      })
-      .catch(() => console.log("Error getting client"))
-      .finally(() => {
-        setIsSearching(false);
-      });
+    const clientId = clientIdRef.current.value.toUpperCase();
+
+    if (clientId) {
+      API_CLIENTS.getClient(clientId)
+        .then(clientSnapshot => {
+          if (!clientSnapshot.exists) setIsFound(false);
+          else {
+            setIsFound(true);
+            props.setClientRef(clientSnapshot.ref);
+          }
+        })
+        .catch((err) => console.log("Error getting client", err))
+    }
+
+    setIsSearching(false);
   }
 
   const handleOpen = () => {
