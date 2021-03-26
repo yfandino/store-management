@@ -107,10 +107,10 @@ const Form = () => {
     e.preventDefault();
     setIsSaving(true)
     alert("Not implemented yet");
-    const invoice = {
-      client,
-      lines
-    }
+    // const invoice = {
+    //   client,
+    //   lines
+    // }
     setIsSaving(false)
   }
 
